@@ -85,4 +85,26 @@ class DataFrameFieldExtractorTest {
 
     assertEquals(expected, actual)
   }
+
+  @Test
+  def extractStar(): Unit = {
+    val settings = new TestSettings()
+    settings.setProperty(ConstantFieldExtractor.PROPERTY, "*")
+    val extractor = new DataFrameFieldExtractor()
+    extractor.setSettings(settings)
+
+    val data = (Row("value1", "value2", Row("target")),
+      StructType(Seq(
+        StructField("foo", StringType),
+        StructField("bar", StringType),
+        StructField("test", StructType(Seq(
+          StructField("test", StringType)
+        )))
+      )))
+
+    val expected = Row("value1", "value2", Row("target"))
+    val actual = extractor.field(data)
+
+    assertEquals(expected, actual)
+  }
 }

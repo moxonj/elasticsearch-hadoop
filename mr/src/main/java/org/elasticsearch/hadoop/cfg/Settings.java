@@ -408,6 +408,15 @@ public abstract class Settings {
         return hasUpdateScript() && StringUtils.hasText(getUpdateScriptParamsJson());
     }
 
+    public Boolean getUpdateScriptUpsert() {
+        return Booleans.parseBoolean(getProperty(ES_UPDATE_SCRIPT_UPSERT, ES_UPDATE_SCRIPT_UPSERT_DEFAULT));
+    }
+
+    public boolean hasScriptUpsert() {
+        String op = getOperation();
+        return ConfigurationOptions.ES_OPERATION_UPSERT.equals(op) && getUpdateScriptUpsert();
+    }
+
     private String getLegacyProperty(String legacyProperty, String newProperty, String defaultValue) {
         String legacy = getProperty(legacyProperty);
         if (StringUtils.hasText(legacy)) {

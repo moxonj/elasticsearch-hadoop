@@ -27,7 +27,13 @@ class DataFrameFieldExtractor extends ScalaMapFieldExtractor {
 
   override protected def extractField(target: AnyRef): AnyRef = {
     var obj = target
-    for (in <- 0 until getFieldNames.size()) {
+    val fieldsLen= getFieldNames.size()
+
+    if (fieldsLen == 1 && getFieldNames.get(0) == "*") {
+      return obj
+    }
+
+    for (in <- 0 until fieldsLen) {
       val field = getFieldNames.get(in)
       obj = obj match {
         case (row: Row, struct: StructType) => {
